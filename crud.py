@@ -1,10 +1,16 @@
 from sqlalchemy.orm import Session
+from typing import Optional
 import models
 import schemas
 
 
-def get_books(db: Session):
-    return db.query(models.Book).all()
+def get_books(db: Session, skip: int = 0, limit: int = 100, author_id: Optional[int] = None):
+    query = db.query(models.Book)
+
+    if author_id:
+        query = query.filter(models.Book.author_id == author_id)
+
+    return query.offset(skip).limit(limit).all()
 
 
 def get_book(db: Session, book_id: int):
@@ -27,8 +33,8 @@ def delete_book(db: Session, book_id: int):
     return db_book
 
 
-def get_authors(db: Session):
-    return db.query(models.Author).all()
+def get_authors(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Author).offset(skip).limit(limit).all()
 
 
 def get_author(db: Session, author_id: int):
