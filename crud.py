@@ -7,7 +7,7 @@ import schemas
 def get_books(db: Session, skip: int = 0, limit: int = 100, author_id: Optional[int] = None):
     query = db.query(models.Book)
 
-    if author_id:
+    if author_id is not None:
         query = query.filter(models.Book.author_id == author_id)
 
     return query.offset(skip).limit(limit).all()
@@ -33,6 +33,7 @@ def delete_book(db: Session, book_id: int):
     return db_book
 
 
+# Author CRUD
 def get_authors(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Author).offset(skip).limit(limit).all()
 
